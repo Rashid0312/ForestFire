@@ -22,11 +22,11 @@ export default function Landing() {
         <h1>Forest Fire Prediction</h1>
         <p>AI-powered wildfire risk assessment and monitoring</p>
         <div className="button-group">
-          <Link to="/dashboard" className="btn btn-primary">
+          <Link to="/survey" className="btn btn-primary">
             Get Started
           </Link>
-          <Link to="/about" className="btn btn-secondary">
-            Learn More
+          <Link to="/dashboard" className="btn btn-primary">
+            Learn more
           </Link>
         </div>
       </div>
