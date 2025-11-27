@@ -1,4 +1,3 @@
-from ucimlrepo import fetch_ucirepo
 import pandas as pd
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -7,26 +6,22 @@ from xgboost import XGBClassifier
 import joblib
 import numpy as np
 
-print("Loading dataset...")
-forest_fires = fetch_ucirepo(id=162)
-X = forest_fires.data.features
-y = forest_fires.data.targets
+print("Loading NASA European fire dataset...")
+# Load the NEW dataset (after running create_training_data.py)
+df = pd.read_csv('data/fire_training_dataset.csv')
 
-# Use ALL relevant features including FWI indices
-# FWI indices are designed specifically for fire prediction
+# Features and target
 all_features = ['FFMC', 'DMC', 'DC', 'ISI', 'temp', 'RH', 'wind', 'rain']
-X_all = X[all_features]
+X = df[all_features]
+y = df['fire']  # Already binary (0 or 1)
 
-# Binary classification: Fire Risk or No Risk
-y_binary = (y['area'] > 0).astype(int)
-
-print(f"Total samples: {len(y_binary)}")
-print(f"Fire events: {y_binary.sum()} ({y_binary.sum()/len(y_binary)*100:.1f}%)")
-print(f"No fire events: {(1-y_binary).sum()} ({(1-y_binary).sum()/len(y_binary)*100:.1f}%)")
+print(f"Total samples: {len(y)}")
+print(f"Fire events: {y.sum()} ({y.sum()/len(y)*100:.1f}%)")
+print(f"No fire events: {(1-y).sum()} ({(1-y).sum()/len(y)*100:.1f}%)")
 
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(
-    X_all, y_binary, test_size=0.2, random_state=42, stratify=y_binary
+    X, y, test_size=0.2, random_state=42, stratify=y
 )
 
 # Scale features
@@ -103,12 +98,8 @@ if hasattr(best_model, 'feature_importances_'):
 
 # Save best model
 print("\nSaving model...")
-joblib.dump(best_model, 'models/fire_model.pkl')
-joblib.dump(scaler, 'models/scaler.pkl')
-
-# Save feature list for API
-with open('models/features.txt', 'w') as f:
-    f.write(','.join(all_features))
+joblib.dump(best_model, 'model.pkl')
+joblib.dump(scaler, 'scaler.pkl')
 
 print("\n✅ Model trained and saved successfully!")
 print(f"Model expects input: {all_features}")
