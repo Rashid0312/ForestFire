@@ -11,10 +11,10 @@ export default function Landing() {
         disableAnimation={false}
         enableMouseInteraction={true}
         mouseRadius={0.1}
-        colorNum={4}
+        colorNum={4.0}
         waveAmplitude={0.3}
-        waveFrequency={3}
-        waveSpeed={0.1}
+        waveFrequency={4}
+        waveSpeed={0.2}
   />
       </div>
       
@@ -25,9 +25,10 @@ export default function Landing() {
           <Link to="/survey" className="btn btn-primary">
             Get Started
           </Link>
-          <Link to="/dashboard" className="btn btn-primary">
+          <Link to="/About" className="btn btn-primary">
             Learn more
           </Link>
+         
         </div>
       </div>
     </div>

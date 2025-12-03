@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: fireforest-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+    volumes:
+      - ./backend:/app
+    networks:
+      - fireforest-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: fireforest-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - fireforest-network
+    restart: unless-stopped
+
+networks:
+  fireforest-network:
+    driver: bridge
+
